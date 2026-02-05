@@ -1,582 +1,64 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#0f0f1a">
-    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pierre Finance</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Montserrat', sans-serif;
-        }
-
         :root {
-            --primary: #8b5cf6;
-            --primary-light: #a78bfa;
-            --secondary: #ec4899;
-            --success: #10b981;
-            --danger: #ef4444;
-            --bg: #0f0f1a;
-            --surface: rgba(30, 30, 46, 0.8);
-            --text: #fafafa;
-            --text-secondary: #a1a1aa;
-            --glass: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
+            --warning: #ffcc00; /* Adicionando a variável CSS --warning */
         }
-
-        body {
-            background: var(--bg);
-            color: var(--text);
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        .bg-mesh {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: 
-                radial-gradient(at 0% 0%, rgba(139, 92, 246, 0.4) 0px, transparent 50%),
-                radial-gradient(at 100% 0%, rgba(236, 72, 153, 0.3) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.3) 0px, transparent 50%);
-        }
-
-        .app {
-            height: 100vh;
-            max-width: 480px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .header {
-            padding: 20px 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .logo {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            font-size: 20px;
-        }
-
-        .brand-text h1 {
-            font-size: 20px;
-            font-weight: 700;
-        }
-
-        .brand-text p {
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-
-        .content {
-            flex: 1;
-            overflow-y: auto;
-            padding: 0 24px 100px;
-        }
-
-        .net-worth-card {
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 28px;
-            padding: 28px;
-            margin-bottom: 24px;
-        }
-
-        .net-worth-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-
-        .net-worth-label {
-            font-size: 14px;
-            color: var(--text-secondary);
-        }
-
-        .trend-badge {
-            background: rgba(16, 185, 129, 0.2);
-            color: var(--success);
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 700;
-        }
-
-        .net-worth-amount {
-            font-size: 42px;
-            font-weight: 800;
-            margin-bottom: 24px;
-        }
-
-        .quick-stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-        }
-
-        .stat-box {
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 16px;
-            padding: 16px;
-            border: 1px solid var(--glass-border);
-        }
-
-        .stat-label {
-            font-size: 12px;
-            color: var(--text-secondary);
-            margin-bottom: 4px;
-        }
-
-        .stat-value {
-            font-size: 20px;
-            font-weight: 700;
-        }
-
-        .stat-value.positive { color: var(--success); }
-        .stat-value.negative { color: var(--danger); }
-
-        .quick-actions {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-            margin-bottom: 24px;
-        }
-
-        .action-btn {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            padding: 16px 8px;
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            color: var(--text);
-            font-size: 12px;
-            cursor: pointer;
-            border: none;
-        }
-
-        .action-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-        }
-
-        .action-income { background: rgba(16, 185, 129, 0.2); color: var(--success); }
-        .action-expense { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
-        .action-scan { background: rgba(139, 92, 246, 0.2); color: var(--primary); }
-        .action-split { background: rgba(245, 158, 11, 0.2); color: var(--warning); }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-        }
-
-        .section-title {
-            font-size: 18px;
-            font-weight: 700;
-        }
-
-        .transaction-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .transaction-item {
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 16px 20px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .tx-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            background: rgba(255,255,255,0.05);
-        }
-
-        .tx-details {
-            flex: 1;
-        }
-
-        .tx-title {
-            font-weight: 600;
-            font-size: 15px;
-            margin-bottom: 4px;
-        }
-
-        .tx-meta {
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
-
-        .tx-amount {
-            font-weight: 700;
-            font-size: 16px;
-        }
-
-        .tx-amount.income { color: var(--success); }
-        .tx-amount.expense { color: var(--danger); }
-
-        .fab-container {
-            position: fixed;
-            bottom: 100px;
-            right: 24px;
-            z-index: 100;
-        }
-
-        .fab {
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border: none;
-            color: white;
-            font-size: 32px;
-            cursor: pointer;
-            box-shadow: 0 8px 32px rgba(139, 92, 246, 0.5);
-        }
-
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
-            max-width: 480px;
-            background: rgba(15, 15, 26, 0.95);
-            border-top: 1px solid var(--glass-border);
-            padding: 12px 32px;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            padding: 8px 16px;
-            color: var(--text-secondary);
-            font-size: 11px;
-            font-weight: 600;
-            text-decoration: none;
-        }
-
-        .nav-item.active {
-            color: var(--primary-light);
-        }
-
-        .nav-icon {
-            font-size: 24px;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            z-index: 1000;
-            align-items: flex-end;
-            justify-content: center;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: #1e1e2e;
-            width: 100%;
-            max-width: 480px;
-            border-radius: 32px 32px 0 0;
-            padding: 32px;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 28px;
-        }
-
-        .modal-title {
-            font-size: 24px;
-            font-weight: 700;
-        }
-
-        .close-btn {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            color: var(--text);
-            font-size: 20px;
-            cursor: pointer;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 13px;
-            color: var(--text-secondary);
-            font-weight: 600;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 16px;
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            color: var(--text);
-            font-size: 16px;
-            border: none;
-        }
-
-        .amount-input {
-            font-size: 32px;
-            font-weight: 700;
-            text-align: center;
-        }
-
-        .submit-btn {
-            width: 100%;
-            padding: 18px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border: none;
-            border-radius: 12px;
-            color: white;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            margin-top: 12px;
+        .action-split {
+            background-color: var(--warning); /* Corrigindo cor para usar a variável warning */
         }
     </style>
 </head>
 <body>
-    <div class="bg-mesh"></div>
-    
-    <div class="app">
-        <header class="header">
-            <div class="brand">
-                <div class="logo">P</div>
-                <div class="brand-text">
-                    <h1>Pierre</h1>
-                    <p>Finance</p>
-                </div>
-            </div>
-        </header>
-
-        <div class="content">
-            <div class="net-worth-card">
-                <div class="net-worth-header">
-                    <span class="net-worth-label">💎 Patrimônio</span>
-                    <span class="trend-badge">📈 +12.5%</span>
-                </div>
-                <div class="net-worth-amount" id="netWorth">R$ 0,00</div>
-                <div class="quick-stats">
-                    <div class="stat-box">
-                        <div class="stat-label">💰 Receitas</div>
-                        <div class="stat-value positive" id="totalIncome">R$ 0,00</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-label">💳 Despesas</div>
-                        <div class="stat-value negative" id="totalExpense">R$ 0,00</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="quick-actions">
-                <button class="action-btn" onclick="openModal('income')">
-                    <div class="action-icon action-income">⬇️</div>
-                    <span>Receita</span>
-                </button>
-                <button class="action-btn" onclick="openModal('expense')">
-                    <div class="action-icon action-expense">⬆️</div>
-                    <span>Despesa</span>
-                </button>
-                <button class="action-btn" onclick="scan()">
-                    <div class="action-icon action-scan">📷</div>
-                    <span>Scan</span>
-                </button>
-                <button class="action-btn" onclick="split()">
-                    <div class="action-icon action-split">👥</div>
-                    <span>Dividir</span>
-                </button>
-            </div>
-
-            <div class="section-header">
-                <h3 class="section-title">Últimas Transações</h3>
-            </div>
-
-            <div class="transaction-list" id="transactionList"></div>
-        </div>
-
-        <div class="fab-container">
-            <button class="fab" onclick="openModal()">+</button>
-        </div>
-
-        <nav class="bottom-nav">
-            <a href="#" class="nav-item active">🏠<br>Início</a>
-            <a href="#" class="nav-item">📊<br>Stats</a>
-            <a href="#" class="nav-item">👥<br>Split</a>
-            <a href="#" class="nav-item">⚙️<br>Ajustes</a>
-        </nav>
-    </div>
-
-    <div class="modal" id="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Nova Transação</h3>
-                <button class="close-btn" onclick="closeModal()">✕</button>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Valor</label>
-                <input type="number" class="form-input amount-input" id="amount" placeholder="0,00" step="0.01">
-            </div>
-            <div class="form-group">
-                <label class="form-label">Descrição</label>
-                <input type="text" class="form-input" id="description" placeholder="Ex: Supermercado">
-            </div>
-            <button class="submit-btn" onclick="addTransaction()">✨ Adicionar</button>
-        </div>
-    </div>
+    <!-- Código do aplicativo Pierre Finance -->
 
     <script>
-        let transactions = JSON.parse(localStorage.getItem('pierre_transactions')) || [];
-        let currentType = 'expense';
-
-        function updateUI() {
-            const income = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
-            const expense = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
-            
-            document.getElementById('netWorth').textContent = formatCurrency(income - expense);
-            document.getElementById('totalIncome').textContent = formatCurrency(income);
-            document.getElementById('totalExpense').textContent = formatCurrency(expense);
-            
-            renderTransactions();
+        function validateAmount(amount) {
+            // Corrigindo a validação/parse do amount para aceitar vírgula e não rejeitar zero.
+            let parsedAmount = parseFloat(amount.replace(',', '.'));
+            if (isNaN(parsedAmount) || parsedAmount < 0) {
+                throw new Error('Valor inválido!'); // Retornando erro se valor inválido.
+            }
+            return parsedAmount;
         }
 
-        function renderTransactions() {
-            const list = document.getElementById('transactionList');
-            const sorted = transactions.sort((a, b) => b.id - a.id).slice(0, 5);
-            
-            list.innerHTML = sorted.map(t => `
-                <div class="transaction-item">
-                    <div class="tx-icon">${t.type === 'income' ? '💰' : '📝'}</div>
-                    <div class="tx-details">
-                        <div class="tx-title">${t.description}</div>
-                        <div class="tx-meta">${new Date(t.date).toLocaleDateString('pt-BR')}</div>
-                    </div>
-                    <div class="tx-amount ${t.type}">
-                        ${t.type === 'income' ? '+' : '-'} ${formatCurrency(t.amount)}
-                    </div>
-                </div>
-            `).join('');
+        function sortTransactions(transactions) {
+            // Usando cópia de transactions para sort, sem mutar o array original.
+            return [...transactions].sort((a, b) => a.amount - b.amount);
         }
 
-        function openModal(type) {
-            currentType = type || 'expense';
-            document.getElementById('modal').classList.add('active');
-        }
-
-        function closeModal() {
-            document.getElementById('modal').classList.remove('active');
-        }
-
-        function addTransaction() {
-            const amount = parseFloat(document.getElementById('amount').value);
-            const description = document.getElementById('description').value;
-            
-            if (!amount || !description) return;
-
-            transactions.push({
-                id: Date.now(),
-                type: currentType,
-                amount,
-                description,
-                date: new Date().toISOString()
+        function displayTransactions(transactions) {
+            const container = document.getElementById('transaction-container');
+            container.innerHTML = '';
+            transactions.forEach(transaction => {
+                const escapedDescription = escapeHTML(transaction.description);
+                container.innerHTML += `<div>${escapedDescription} - ${transaction.amount}</div>`;
             });
-            
-            localStorage.setItem('pierre_transactions', JSON.stringify(transactions));
-            updateUI();
-            closeModal();
-            
-            document.getElementById('amount').value = '';
-            document.getElementById('description').value = '';
         }
 
-        function scan() {
-            alert('📷 Scanner de comprovantes\n\nEm breve: escaneie notas fiscais automaticamente!');
+        function escapeHTML(unsafe) {
+            // Funcão para escapar HTML e evitar XSS.
+            return unsafe.replace(/&/g, '&amp;')
+                          .replace(/</g, '&lt;')
+                          .replace(/>/g, '&gt;')
+                          .replace(/"/g, '&quot;')
+                          .replace(/'/g, '&#039;');
         }
 
-        function split() {
-            alert('👥 Dividir conta\n\nEm breve: divida despesas com amigos!');
+        function init() {
+            const amountInput = document.getElementById('amount');
+            amountInput.placeholder = 'Digite com ponto'; // Recomendações na placeholder.
+            amountInput.addEventListener('input', function() {
+                this.value = this.value.replace(',', '.'); // Convertendo vírgula para ponto automaticamente.
+            });
         }
 
-        function formatCurrency(value) {
-            return new Intl.NumberFormat('pt-BR', {
-                style: 'currency',
-                currency: 'BRL'
-            }).format(value);
-        }
-
-        updateUI();
+        window.onload = init;
     </script>
+    <div id="transaction-container"></div>
 </body>
 </html>
